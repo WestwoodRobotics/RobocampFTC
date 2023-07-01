@@ -109,24 +109,12 @@ public class MecanumField extends OpMode {
         double turn = -(gamepad1.right_stick_x) * 0.7;
 
         this.calcNewXY(strafing, straight);
-        if (gamepad1.left_bumper) {
-            leftFrontPower = 1.5 * (-nY - nX - turn);
-            rightFrontPower = 1.5 * (-nY - nX + turn);
-            leftBackPower = 1.5 * (-nY + nX - turn);
-            rightBackPower = 1.5 * (-nY + nX + turn);
 
-        } else if (gamepad1.right_bumper) {
-            leftFrontPower = 0.2 * (-nY - nX - turn);
-            rightFrontPower = 0.2 * (-nY - nX + turn);
-            leftBackPower = 0.2 * (-nY + nX - turn);
-            rightBackPower = 0.2 * (-nY + nX + turn);
+        leftFrontPower = 0.4 * (-nY - nX - turn);
+        rightFrontPower = 0.4 * (-nY - nX + turn);
+        leftBackPower = 0.4 * (-nY + nX - turn);
+        rightBackPower = 0.4 * (-nY + nX + turn);
 
-        } else {
-            leftFrontPower = 0.4 * (-nY - nX - turn);
-            rightFrontPower = 0.4 * (-nY - nX + turn);
-            leftBackPower = 0.4 * (-nY + nX - turn);
-            rightBackPower = 0.4 * (-nY + nX + turn);
-        }
 
         frontLeft.setVelocity(leftFrontPower * 3000);
         frontRight.setVelocity(rightBackPower * 3000);
