@@ -123,6 +123,22 @@ public class TankField extends OpMode {
     }
 
 
+/* How autoturn worked
+distance = target-angle
+
+if distance < 0 {distance + 360}
+
+if distance >= 180{
+    turn one way
+
+}else{
+    Turn opposite
+}
+
+*/
+
+
+
 
 //TODO: check if this will be necessary idts but just in case
 
