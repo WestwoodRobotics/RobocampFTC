@@ -104,17 +104,6 @@ public class TankField extends OpMode {
     @Override
     public void loop() {
 
-        leftFrontPower = 0;
-        rightFrontPower = 0;
-        leftBackPower = 0;
-        rightBackPower = 0;
-
-
-        frontLeft.setVelocity(leftFrontPower * 3000);
-        frontRight.setVelocity(rightBackPower * 3000);
-        backLeft.setVelocity(leftBackPower * 3000);
-        backRight.setVelocity(rightFrontPower * 3000);
-
         telemetry.addData("currentAngle: ", currentActualAngle);
 
         if (gamepad1.dpad_down && gamepad1.a) {
@@ -123,42 +112,6 @@ public class TankField extends OpMode {
     }
 
 
-/* How autoturn worked
-distance = target-angle
-
-if distance < 0 {distance + 360}
-
-if distance >= 180{
-    turn one way
-
-}else{
-    Turn opposite
-}
-
-*/
-
-
-
-
-//TODO: check if this will be necessary idts but just in case
-
-//    public void calcNewXY(double x, double y) {
-//        orgAngle = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES).firstAngle;
-//        orgAngle = orgAngle + 90;
-//        if (orgAngle < 0) {
-//            orgAngle = orgAngle + 360;
-//        }
-//
-//        if (orgAngle > 360) {
-//            orgAngle = orgAngle - 360;
-//        }
-//        rTheta = orgAngle + offSetAngle;
-//        rThetaRad = rTheta * (Math.PI / 180.0);
-//        double cosTheta = Math.cos(rThetaRad);
-//        double sinTheta = Math.sin(rThetaRad);
-//        nX = (x * sinTheta) - (y * cosTheta);
-//        nY = (x * cosTheta) + (y * sinTheta);
-//    }
 
 
     @Override
@@ -166,7 +119,7 @@ if distance >= 180{
     }
 
     public double getAngle() {
-        return imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.XYZ, AngleUnit.DEGREES).firstAngle;
+        return (imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.XYZ, AngleUnit.DEGREES).firstAngle) + offSetAngle;
     }
 
 
