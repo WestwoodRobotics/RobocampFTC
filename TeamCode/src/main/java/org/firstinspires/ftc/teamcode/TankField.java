@@ -15,11 +15,6 @@ import org.firstinspires.ftc.teamcode.util.BNO055IMUUtil;
 
 @TeleOp(name = "MecanumField")
 public class TankField extends OpMode {
-    double rTheta = 0;
-    double rThetaRad = 0;
-    double nX = 0;
-    double nY = 0;
-    double orgAngle;
     // Declare OpMode members.
     private final ElapsedTime runtime = new ElapsedTime();
     private DcMotorEx frontLeft;
@@ -32,8 +27,11 @@ public class TankField extends OpMode {
     double rightFrontPower;
     double leftBackPower;
     double rightBackPower;
+
+    public double turn = 0;
+    public double move = 0;
+
     double offSetAngle = 0;
-    double currentActualAngle = 0;
 
     public void setup() {
         init();
@@ -83,28 +81,29 @@ public class TankField extends OpMode {
         BNO055IMUUtil.remapAxes(imu, AxesOrder.XYZ, AxesSigns.NPN);
     }
 
-    /*
-     * Code to run REPEATEDLY after the driver hits INIT, but before they hit PLAY
-     */
-    @Override
-    public void init_loop() {
-    }
 
-    /*
-     * Code to run ONCE when the driver hits PLAY
-     */
     @Override
     public void start() {
         runtime.reset();
     }
 
-    /*
-     * Code to run REPEATEDLY after the driver hits PLAY but before they hit STOP
-     */
     @Override
     public void loop() {
 
-        telemetry.addData("currentAngle: ", currentActualAngle);
+        telemetry.addData("currentAngle: ", getAngle());
+
+        move(gamepad1.left_stick_x, gamepad1.left_stick_y);
+
+        leftFrontPower = move - turn;
+        leftBackPower = move - turn;
+        rightFrontPower = move - turn;
+        rightBackPower = move - turn;
+
+        frontLeft.setVelocity(leftFrontPower * 6000);
+        frontRight.setVelocity(rightFrontPower * 6000);
+        backLeft.setVelocity(leftBackPower * 6000);
+        backRight.setVelocity(rightBackPower * 6000);
+
 
         if (gamepad1.dpad_down && gamepad1.a) {
             OffSet();
@@ -112,19 +111,60 @@ public class TankField extends OpMode {
     }
 
 
-
-
-    @Override
-    public void stop() {
-    }
-
     public double getAngle() {
         return (imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.XYZ, AngleUnit.DEGREES).firstAngle) + offSetAngle;
     }
 
+    public void move(double x, double y) {
+        //Target angle finding
+        int target = 90;
+        if (y!=0 || x!=0) {
+            if (x != 0) {
+                target = (int) Math.toDegrees(Math.atan(y / x));
+            } else if (y > 0) {
+                target = 90;
+            } else {
+                target = 270;
+            }
+        }
+
+
+        //turning
+        int angleDiff = (int) (target - (Math.toDegrees(getAngle()) % 360));
+        if (angleDiff > 180){
+            angleDiff -= 360;
+        } else if (angleDiff < -180){
+            angleDiff += 360;
+        }
+
+        if (angleDiff > 0){
+            if(Math.abs(angleDiff) > 5){
+                turn = -0.4;
+            }else{
+                turn = -0.1;
+            }
+
+        }else if (angleDiff < 0){
+            if(Math.abs(angleDiff) > 5){
+                turn = 0.4;
+            }else{
+                turn = 0.1;
+            }
+
+        }else{
+            turn = 0;
+        }
+
+
+        //movement
+        move = (Math.sqrt(Math.pow(x,2) + Math.pow(y,2))) * 0.6;
+
+
+    }
+
 
     public void OffSet() {
-        offSetAngle = 90 - orgAngle;
+        offSetAngle = 90 - getAngle();
     }
 
 }
