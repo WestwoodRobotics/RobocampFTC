@@ -110,10 +110,10 @@ public class MecanumField extends OpMode {
 
         this.calcNewXY(strafing, straight);
 
-        leftFrontPower = 0.4 * (-nY - nX - turn);
-        rightFrontPower = 0.4 * (-nY - nX + turn);
-        leftBackPower = 0.4 * (-nY + nX - turn);
-        rightBackPower = 0.4 * (-nY + nX + turn);
+        leftFrontPower =(-nY - nX - turn);
+        rightFrontPower =(-nY - nX + turn);
+        leftBackPower =(-nY + nX - turn);
+        rightBackPower = (-nY + nX + turn);
 
 
         frontLeft.setVelocity(leftFrontPower * 3000);

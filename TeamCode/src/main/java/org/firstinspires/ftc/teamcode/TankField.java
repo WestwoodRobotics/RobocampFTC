@@ -31,7 +31,11 @@ public class TankField extends OpMode {
     public double turn = 0;
     public double move = 0;
 
-    double offSetAngle = 0;
+    public double offSetAngle = 0;
+
+    public int target = 0;
+
+    public double angle;
 
     public void setup() {
         init();
@@ -94,6 +98,7 @@ public class TankField extends OpMode {
 
         move(gamepad1.left_stick_x, gamepad1.left_stick_y);
 
+
         leftFrontPower = move + turn;
         leftBackPower = move + turn;
         rightFrontPower = move - turn;
@@ -112,52 +117,63 @@ public class TankField extends OpMode {
 
 
     public double getAngle() {
-        return (imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.XYZ, AngleUnit.DEGREES).firstAngle) + offSetAngle;
+        double angle = (imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES).firstAngle) + offSetAngle;
+
+        if (angle < 0){
+            angle += 360;
+        }
+
+        return angle;
     }
 
     public void move(double x, double y) {
         //Target angle finding
-        int target = 90;
-        if (y!=0 || x!=0) {
-            if (x != 0) {
-                target = (int) Math.toDegrees(Math.atan(y / x));
-            } else if (y > 0) {
-                target = 90;
-            } else {
-                target = 270;
-            }
+        if (x != 0 || y != 0) {
+            angle = Math.atan2(y, -x);  // Calculate the angle in radians
+        }
+        target = (int) Math.toDegrees(angle);  // Convert the angle to degrees
+        if (target < 0) {
+            target += 360;  // Adjust the angle to be within the 0-360 degree range
+        }
+        target += 90;  // Shift the angle by 270 degrees
+        if (target >= 360) {
+            target -= 360;  // Wrap the angle within the 0-360 degree range
+        }
+
+        if (target == 0){
+            target = 355;
         }
 
 
+
+        telemetry.addData("target angle",target);
         //turning
-        int angleDiff = (int) (target - (Math.toDegrees(getAngle()) % 360));
-        if (angleDiff > 180){
-            angleDiff -= 360;
-        } else if (angleDiff < -180){
-            angleDiff += 360;
-        }
-
-        if (angleDiff > 0){
-            if(Math.abs(angleDiff) > 5){
-                turn = -0.4;
+        int angleDiff = (int) (target - getAngle());
+//        if (angleDiff > 180){
+//            angleDiff += 360;
+//        } else if (angleDiff < -180){
+//            angleDiff -= 360;
+//        }
+        telemetry.addData("angle distance",angleDiff);
+        if (Math.abs(angleDiff) > 15){
+            if (angleDiff > 0){
+                turn = 0.5;
             }else{
-                turn = -0.1;
+                turn = -0.5;
             }
-
-        }else if (angleDiff < 0){
-            if(Math.abs(angleDiff) > 5){
-                turn = 0.4;
-            }else{
-                turn = 0.1;
-            }
-
         }else{
-            turn = 0;
+            if (angleDiff > 0){
+                turn = 0.05;
+            }else if(angleDiff < 0){
+                turn = -0.05;
+            }else{
+                turn = 0;
+            }
         }
 
 
         //movement
-        move = (Math.sqrt(Math.pow(x,2) + Math.pow(y,2))) * 0.6;
+        move = -(Math.sqrt(Math.pow(x,2) + Math.pow(y,2))) * 0.4;
 
 
     }

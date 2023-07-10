@@ -40,10 +40,10 @@ public class MecanumRobot extends OpMode {
         double leftBackPower;
         double rightBackPower;
 
-        leftFrontPower = 1.5 * (-gamepad1.left_stick_y - gamepad1.left_stick_x - gamepad1.right_stick_x);
-        rightFrontPower = 1.5 * (-gamepad1.left_stick_y - gamepad1.left_stick_x + gamepad1.right_stick_x);
-        leftBackPower = 1.5 * (-gamepad1.left_stick_y + gamepad1.left_stick_x - gamepad1.right_stick_x);
-        rightBackPower = 1.5 * (-gamepad1.left_stick_y + gamepad1.left_stick_x + gamepad1.right_stick_x);
+        leftFrontPower = 1.5 * (gamepad1.left_stick_y - gamepad1.left_stick_x - gamepad1.right_stick_x);
+        rightFrontPower = 1.5 * (gamepad1.left_stick_y - gamepad1.left_stick_x + gamepad1.right_stick_x);
+        leftBackPower = 1.5 * (gamepad1.left_stick_y + gamepad1.left_stick_x - gamepad1.right_stick_x);
+        rightBackPower = 1.5 * (gamepad1.left_stick_y + gamepad1.left_stick_x + gamepad1.right_stick_x);
 
         frontLeft.setVelocity(leftFrontPower * 3000);
         frontRight.setVelocity(rightBackPower * 3000);
