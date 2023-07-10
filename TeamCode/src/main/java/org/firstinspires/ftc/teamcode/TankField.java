@@ -13,7 +13,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
 import org.firstinspires.ftc.teamcode.util.AxesSigns;
 import org.firstinspires.ftc.teamcode.util.BNO055IMUUtil;
 
-@TeleOp(name = "MecanumField")
+@TeleOp(name = "TankField")
 public class TankField extends OpMode {
     // Declare OpMode members.
     private final ElapsedTime runtime = new ElapsedTime();
@@ -94,8 +94,8 @@ public class TankField extends OpMode {
 
         move(gamepad1.left_stick_x, gamepad1.left_stick_y);
 
-        leftFrontPower = move - turn;
-        leftBackPower = move - turn;
+        leftFrontPower = move + turn;
+        leftBackPower = move + turn;
         rightFrontPower = move - turn;
         rightBackPower = move - turn;
 
