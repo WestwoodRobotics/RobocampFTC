@@ -94,8 +94,8 @@ public class TankField extends OpMode {
 
         move(gamepad1.left_stick_x, gamepad1.left_stick_y);
 
-        leftFrontPower = move - turn;
-        leftBackPower = move - turn;
+        leftFrontPower = move + turn;
+        leftBackPower = move + turn;
         rightFrontPower = move - turn;
         rightBackPower = move - turn;
 
